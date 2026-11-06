@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#6c63ff">
+<title>مغامرات العقل الصغير</title>
+<style>
+:root{--ink:#26324b;--purple:#6c63ff;--pink:#ff6fae;--yellow:#ffd45c;--green:#48c78e;--sky:#68c9f2;--paper:#fff}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;font-family:Tahoma,Arial,sans-serif;color:var(--ink);background:linear-gradient(135deg,#e7f7ff,#fff0f6 55%,#fff8dc);padding:16px}
+button{font:inherit;cursor:pointer}
+.app{max-width:850px;margin:auto}
+.top{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+.brand{font-size:clamp(21px,4vw,30px);font-weight:900;color:#5148d8}
+.pills{display:flex;gap:8px;flex-wrap:wrap}
+.pill{background:white;border-radius:999px;padding:9px 13px;font-weight:bold;box-shadow:0 3px 12px #39415b12}
+.card{background:#ffffffed;border:3px solid #fff;border-radius:26px;padding:clamp(16px,4vw,30px);box-shadow:0 12px 35px #39415b18}
+.hero{text-align:center;overflow:hidden;position:relative}
+.mascot{font-size:clamp(64px,12vw,100px);line-height:1.2;filter:drop-shadow(0 5px 2px #00000012)}
+h1{font-size:clamp(25px,5vw,38px);margin:8px 0;color:#5148d8}
+.sub{font-size:clamp(16px,3vw,20px);line-height:1.7;margin:8px auto 20px;max-width:560px}
+.primary{border:0;background:linear-gradient(135deg,#766cff,#5148d8);color:white;border-radius:18px;padding:14px 26px;font-size:20px;font-weight:900;box-shadow:0 6px 0 #3931a8;transition:.12s}
+.primary:active,.choice:active{transform:translateY(3px);box-shadow:none}
+.secondary{border:2px solid #dedcff;background:#fff;color:#5148d8;border-radius:14px;padding:10px 14px;font-weight:bold}
+.row{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.progress{height:13px;background:#ecebff;border-radius:99px;overflow:hidden;flex:1;min-width:130px}
+.bar{height:100%;width:0;background:linear-gradient(90deg,#ff9bc5,#766cff);border-radius:99px;transition:width .3s}
+.question{text-align:center;margin:18px 0}
+.tag{display:inline-block;background:#fff2c5;color:#775400;padding:7px 13px;border-radius:99px;font-weight:bold}
+.prompt{font-size:clamp(22px,4.5vw,31px);font-weight:900;line-height:1.5;margin:14px 0}
+.visual{font-size:clamp(56px,12vw,90px);margin:8px 0;min-height:105px;display:flex;justify-content:center;align-items:center;gap:8px;flex-wrap:wrap}
+.choices{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:18px}
+.choice{min-height:82px;border:3px solid #e8e7ff;background:#fff;border-radius:20px;padding:12px;font-size:clamp(19px,3.5vw,24px);font-weight:900;color:var(--ink);box-shadow:0 5px 0 #e5e3fa;transition:.12s}
+.choice:hover{border-color:#aaa4ff;background:#f9f8ff}
+.choice.correct{background:#e2fff1;border-color:#48c78e;box-shadow:0 5px 0 #b1ebd1}
+.choice.wrong{background:#fff0f0;border-color:#ff9292;box-shadow:0 5px 0 #ffd0d0}
+.feedback{min-height:54px;text-align:center;font-size:21px;font-weight:900;padding:12px 4px;color:#249b68}
+.actions{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-top:10px}
+.hint{background:#fff8df;border:2px dashed #ffd45c;border-radius:16px;padding:12px;text-align:center;font-size:17px;margin-top:12px}
+.hidden{display:none!important}
+.end{text-align:center}
+.bigstars{font-size:50px;letter-spacing:5px;margin:12px}
+.small{font-size:14px;color:#69738a;line-height:1.6}
+@media(max-width:480px){body{padding:10px}.choices{gap:9px}.choice{min-height:76px;padding:9px}.card{border-radius:21px}.top{margin-bottom:9px}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="top">
+    <div class="brand">🧠 مغامرات العقل الصغير</div>
+    <div class="pills"><div class="pill">⭐ <span id="totalStars">0</span></div><div class="pill">🏅 <span id="levelLabel">المستوى 1</span></div></div>
+  </header>
+
+  <main>
+    <section id="home" class="card hero">
+      <div class="mascot">🦊</div>
+      <h1>مرحباً يا بطل!</h1>
+      <p class="sub">هل أنت مستعد لمغامرة ممتعة؟<br>حلّ الألغاز، واكتشف الأشياء، واجمع النجوم! ⭐</p>
+      <button class="primary" id="startBtn">هيا نلعب! 🚀</button>
+      <p class="small">لعبة لطيفة للأطفال من 4 إلى 6 سنوات • لا تحتاج إلى إنترنت</p>
+    </section>
+
+    <section id="game" class="card hidden">
+      <div class="row">
+        <div class="tag" id="category">لغز 1</div>
+        <div class="progress"><div class="bar" id="progressBar"></div></div>
+        <div class="pill">⭐ <span id="roundStars">0</span></div>
+      </div>
+      <div class="question">
+        <div class="visual" id="visual" aria-hidden="true"></div>
+        <div class="prompt" id="prompt"></div>
+      </div>
+      <div class="choices" id="choices"></div>
+      <div class="feedback" id="feedback" aria-live="polite"></div>
+      <div id="hintBox" class="hint hidden"></div>
+      <div class="actions">
+        <button class="secondary" id="hintBtn">💡 تلميح</button>
+        <button class="secondary" id="soundBtn">🔊 الصوت: تشغيل</button>
+      </div>
+      <div class="actions"><button class="primary hidden" id="nextBtn">التالي ➜</button></div>
+    </section>
+
+    <section id="finish" class="card end hidden">
+      <div class="mascot">🏆</div>
+      <h1>أحسنت يا بطل!</h1>
+      <p class="sub" id="finishText">لقد أكملت المغامرة!</p>
+      <div class="bigstars" id="starRating">⭐⭐⭐</div>
+      <p class="prompt">جمعت <span id="finalStars">0</span> نجمة من 10</p>
+      <button class="primary" id="againBtn">العب مرة أخرى 🔄</button>
+      <p class="small">أنت ذكي ومجتهد! استمر في المحاولة والتعلّم.</p>
+    </section>
+  </main>
+</div>
+<script>
+const puzzles = [
+ {cat:"🧩 لغز الأشياء",visual:"🌧️ ☂️",q:"ماذا نستخدم عندما ينزل المطر؟",a:["مظلة ☂️","ملعقة 🥄","وسادة 🛏️","كرة ⚽"],correct:0,hint:"تحمينا من قطرات المطر."},
+ {cat:"🐾 عالم الحيوانات",visual:"🐱 🐾",q:"أي حيوان يقول: مواء؟",a:["كلب 🐶","قطة 🐱","بقرة 🐮","بطة 🦆"],correct:1,hint:"حيوان صغير يحب الحليب."},
+ {cat:"🔍 ابحث عن المختلف",visual:"🍎 🍎 🍌 🍎",q:"أي صورة مختلفة عن البقية؟",a:["🍎 التفاحة","🍌 الموزة","🍎 التفاحة","🍎 التفاحة"],correct:1,hint:"ابحث عن الفاكهة ذات اللون الأصفر."},
+ {cat:"🔢 الأرقام",visual:"⭐ ⭐ ⭐",q:"كم نجمة نرى هنا؟",a:["نجمتان","ثلاث نجوم","أربع نجوم","خمس نجوم"],correct:1,hint:"عدّ النجوم واحدة، اثنتين، ثلاثاً."},
+ {cat:"🎨 الألوان",visual:"🍓",q:"ما لون الفراولة عادةً؟",a:["أزرق","أخضر","أحمر","بنفسجي"],correct:2,hint:"إنه لون الطماطم أيضاً."},
+ {cat:"🧠 أكمل النمط",visual:"🔴 🔵 🔴 🔵 ❓",q:"ما الشكل الذي يأتي بعد ذلك؟",a:["🔴 أحمر","🟢 أخضر","⭐ نجمة","🟡 أصفر"],correct:0,hint:"الألوان تتناوب: أحمر، أزرق، أحمر، أزرق..."},
+ {cat:"🏡 أشياء حولنا",visual:"🪥 😁",q:"بماذا ننظف أسناننا؟",a:["فرشاة أسنان 🪥","حذاء 👟","قلم ✏️","مفتاح 🔑"],correct:0,hint:"نضع عليها معجون الأسنان."},
+ {cat:"🌳 الطبيعة",visual:"🌳 🍂",q:"أين تنمو أوراق الشجر؟",a:["على الشجرة 🌳","في الثلاجة 🧊","في الحذاء 👟","في البحر 🌊"],correct:0,hint:"انظر إلى الأغصان."},
+ {cat:"🚗 وسائل النقل",visual:"✈️ ☁️",q:"ما الذي يطير في السماء وينقل المسافرين؟",a:["قطار 🚆","طائرة ✈️","دراجة 🚲","قارب 🚤"],correct:1,hint:"له جناحان ومحركات."},
+ {cat:"💡 فكر جيداً",visual:"🌞 🌙",q:"ماذا نرى غالباً في السماء ليلاً؟",a:["الشمس 🌞","القمر 🌙","قوس قزح 🌈","زهرة 🌷"],correct:1,hint:"يضيء الليل وقد نرى حوله نجوماً."}
+];
+let order=[], index=0, stars=0, soundOn=true, locked=false, hintUsed=false;
+const $=id=>document.getElementById(id);
+function show(id){["home","game","finish"].forEach(x=>$(x).classList.toggle("hidden",x!==id))}
+function shuffle(arr){return [...arr].sort(()=>Math.random()-.5)}
+function speak(t){if(!soundOn||!("speechSynthesis" in window))return; speechSynthesis.cancel();let u=new SpeechSynthesisUtterance(t);u.lang="ar";u.rate=.88;speechSynthesis.speak(u)}
+function updateTop(){$("totalStars").textContent=stars;$("roundStars").textContent=stars;$("levelLabel").textContent="المستوى "+(Math.min(index+1,10))}
+function start(){order=shuffle(puzzles);index=0;stars=0;updateTop();show("game");render()}
+function render(){
+ locked=false;hintUsed=false;let p=order[index];
+ $("category").textContent=p.cat+" • "+(index+1)+"/10";
+ $("progressBar").style.width=(index/10*100)+"%";
+ $("visual").textContent=p.visual;$("prompt").textContent=p.q;
+ $("feedback").textContent="";$("hintBox").classList.add("hidden");$("hintBtn").disabled=false;
+ $("nextBtn").classList.add("hidden");$("choices").innerHTML="";
+ p.a.forEach((choice,i)=>{let b=document.createElement("button");b.className="choice";b.textContent=choice;b.addEventListener("click",()=>answer(i,b));$("choices").appendChild(b)});
+ updateTop();
+}
+function answer(i,btn){
+ if(locked)return;let p=order[index];let all=[...$("choices").children];
+ if(i===p.correct){
+  locked=true;stars++;updateTop();btn.classList.add("correct");
+  $("feedback").textContent=["رائع! إجابة صحيحة! 🌟","أحسنت! أنت ذكي! 🎉","ممتاز يا بطل! 👏"][Math.floor(Math.random()*3)];
+  speak("أحسنت! إجابة صحيحة");
+  all.forEach(b=>b.disabled=true);$("nextBtn").classList.remove("hidden");
+ }else{
+  btn.classList.add("wrong");btn.disabled=true;
+  $("feedback").textContent="محاولة جميلة! جرّب مرة أخرى 😊";speak("حاول مرة أخرى");
+ }
+}
+function hint(){let p=order[index];$("hintBox").textContent="💡 "+p.hint;$("hintBox").classList.remove("hidden");$("hintBtn").disabled=true;hintUsed=true;speak(p.hint)}
+function next(){index++;if(index>=10){finish();return}render()}
+function finish(){
+ $("progressBar").style.width="100%";$("finalStars").textContent=stars;
+ $("starRating").textContent=stars>=9?"⭐⭐⭐":stars>=6?"⭐⭐":"⭐";
+ $("finishText").textContent=stars>=8?"يا سلام! لقد أصبحت بطل الألغاز!":"لقد أنهيت اللعبة! كل محاولة تجعلك أذكى.";
+ show("finish");speak("تهانينا! لقد أنهيت اللعبة");
+}
+$("startBtn").addEventListener("click",start);$("againBtn").addEventListener("click",start);
+$("hintBtn").addEventListener("click",hint);$("nextBtn").addEventListener("click",next);
+$("soundBtn").addEventListener("click",()=>{soundOn=!soundOn;$("soundBtn").textContent="🔊 الصوت: "+(soundOn?"تشغيل":"إيقاف");if(!soundOn&&"speechSynthesis"in window)speechSynthesis.cancel()});
+</script>
+</body>
+</html>
